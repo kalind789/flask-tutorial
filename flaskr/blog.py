@@ -11,14 +11,16 @@ bp = Blueprint('blog', __name__)
 def index():
     db=get_db()
     posts = db.execute(
-        'SELECT p.id, title, body, created, author_id, userfrom'
-        'FROM post p JOIN user u ON p.author_id = u.id'
-        'ORDER BY created DESC'
+        """
+        SELECT p.id, title, body, created, author_id, username
+        FROM post p JOIN user u ON p.author_id = u.id
+        ORDER BY created DESC
+        """
     ).fetchall()
 
     return render_template('blog/index.html', posts=posts)
 
-@bp.route('/create')
+@bp.route('/create', methods=("GET", "POST"))
 @login_required
 def create():
     if request.method == 'POST':
@@ -59,7 +61,7 @@ def get_post(id, check_author = True):
 
     return post
 
-@bp.route('/<int:id>/update')
+@bp.route('/<int:id>/update', methods=('GET', 'POST'))
 @login_required
 def update(id):
     post = get_post(id)
