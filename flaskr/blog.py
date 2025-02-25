@@ -48,8 +48,8 @@ def create():
 def get_post(id, check_author = True):
     post = get_db().execute(
         'SELECT p.id, title, body, created, author_id, username'
-        'FROM post p JOIN user u on u.id = p.author_id'
-        'WHERE p.id = ?',
+        ' FROM post p JOIN user u on u.id = p.author_id'
+        ' WHERE p.id = ?',
         (id, )
     ).fetchone()
 
@@ -79,8 +79,10 @@ def update(id):
         else:
             db = get_db()
             db.execute(
-                'UPDATE post SET title = ?, body = ?'
-                'WHERE id = ?',
+                """
+                    UPDATE post SET title = ?, body = ?
+                    WHERE id = ?
+                """,
                 (title, body, id)
             )
             db.commit()
